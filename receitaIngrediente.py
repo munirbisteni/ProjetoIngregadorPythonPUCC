@@ -37,5 +37,3 @@ class receitaIngredientes:
         for row in dados:
             table.add_row(row)
         print(table)
-
-receitaIngredientes.listar_receitaIngredientes_pretty_table()

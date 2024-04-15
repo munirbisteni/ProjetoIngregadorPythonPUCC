@@ -27,5 +27,3 @@ class custosGerais:
         for row in dados:
             table.add_row(row)
         print(table)
-
-custosGerais.listar_custosGerais_pretty_table()

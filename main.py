@@ -4,6 +4,7 @@ from lote import lote
 from loteEstoque import loteEstoque
 from receita import receita
 from receitaIngrediente import receitaIngredientes
+from custosGerais import custosGerais
 def exibir_menu():
     print("1 - Cadastrar Receita")
     print("2 - Listar Receitas")
@@ -13,6 +14,10 @@ def exibir_menu():
     print("6 - Listar ingredientes")
     print("7 - Cadastrar Estoque")
     print("8 - Listar Estoque")
+    print("9 - Cadastrar LoteEstoque") 
+    print("10 - Listar LoteEstoque")
+    print("11 - alterar Custos Gerais")
+    print("12 - listar custos gerais")
     print("0 - Sair")
 
 while True:
@@ -29,7 +34,7 @@ while True:
             input("Enter para continuar")
     elif opcao == 2:
         if len(receita.listar_receitas()) >= 1:
-            receita.listar_receitas()
+            receita.listar_receitas_pretty_table()
             input("Enter para continuar")
         else:
             print("Cadastre ao menos uma receita antes!")
@@ -43,7 +48,7 @@ while True:
             input("Enter para continuar")
     elif opcao == 4:
         if len(lote.listar_lote()) >= 1:
-                lote.listar_lote()
+                lote.listar_lote_pretty_table()
                 input("Enter para continuar")
         else:
             print("Cadastre ao menos uma receita antes!")
@@ -53,7 +58,7 @@ while True:
         input("Enter para continuar")
     elif opcao == 6:
         if len(ingrediente.listar_ingredientes) >= 1:
-                ingrediente.listar_ingredientes()
+                ingrediente.listar_receitas_pretty_table()
                 input("Enter para continuar")
         else:
             print("Cadastre ao menos um ingrediente antes!")
@@ -67,8 +72,28 @@ while True:
             input("Enter para continuar")
     elif opcao == 8:
         if len(estoque.listar_estoque()) >= 1:
-                estoque.listar_estoque()
+                estoque.listar_estoque_pretty_table()
                 input("Enter para continuar")
+    elif opcao == 9:
+        if len(lote.listar_lote()) >= 1 and len(estoque.listar_estoque()) >= 1:
+             loteEstoque.cadastrar_loteEstoque()
         else:
-            print("Cadastre ao menos uma receita antes!")
+            print("Cadastre ao menos um lote e um estoque!")
             input("Enter para continuar")
+    elif opcao == 10:
+        if len(loteEstoque.listar_loteEstoque()) >= 1:
+             loteEstoque.listar_loteEstoque_pretty_table()
+        else:
+            print("Cadastre ao menos um loteEstoque!")
+            input("Enter para continuar")
+    elif opcao == 11:
+        custosGerais.alterarCustoGeral()
+        input("Enter para continuar")
+    elif opcao == 12:
+        custosGerais.listar_custosGerais_pretty_table()
+        input("Enter para continuar")
+
+    else:
+        print("Cadastre ao menos uma receita antes!")
+        input("Enter para continuar")
+    
