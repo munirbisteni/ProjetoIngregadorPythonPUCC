@@ -18,7 +18,7 @@ class receitaIngredientes:
                 ingredienteID = int(input("Escolha o ID do ingrediente que é usado na receita: "))
                 quantidade = int(input("Escreva a quantidade que é usado do ingrediente na receita por unidade: "))
                 OracleConnection = oracleConnection()
-                OracleConnection.cursor.execute('Insert into receitaIngredientes(receitaID, ingredienteID,quantidade) values (:1, :2, :3)', (receitaID,ingredienteID, quantidade))
+                OracleConnection.cursor.execute('Insert into receitaIngredientes(receitaID, ingredienteID,quantidadeUsada) values (:1, :2, :3)', (receitaID,ingredienteID, quantidade))
                 OracleConnection.kill()
     
     @staticmethod
