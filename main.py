@@ -18,6 +18,8 @@ def exibir_menu():
     print("10 - Listar LoteEstoque")
     print("11 - alterar Custos Gerais")
     print("12 - listar custos gerais")
+    print("13 - Cadastar receitaIngredientes")
+    print("14 - Listar ReceitaIngredientes")
     print("0 - Sair")
 
 while True:
@@ -92,7 +94,18 @@ while True:
     elif opcao == 12:
         custosGerais.listar_custosGerais_pretty_table()
         input("Enter para continuar")
-
+    elif opcao == 13:
+        if len(receita.listar_receitas()) >= 1 and len(ingrediente.listar_ingredientes()) >= 1:
+             receitaIngredientes.cadastrar_receitaIngredientes()
+        else:
+            print("Cadastre ao menos um lote e um estoque!")
+            input("Enter para continuar")
+    elif opcao == 14:
+        if len(receitaIngredientes.listar_receitaIngredientes()) >= 1:
+             receitaIngredientes.listar_receitaIngredientes_pretty_table()
+        else:
+            print("Cadastre ao menos um loteEstoque!")
+            input("Enter para continuar")
     else:
         print("Cadastre ao menos uma receita antes!")
         input("Enter para continuar")
