@@ -2,6 +2,8 @@ from dbConnection import oracleConnection
 from estoque import estoque
 from prettytable import PrettyTable
 from lote import lote  
+from datetime import datetime
+
 class loteEstoque:
     @staticmethod
     def cadastrar_loteEstoque():
@@ -32,8 +34,9 @@ class loteEstoque:
     
     @staticmethod
     def listar_loteEstoque():
+        dataHoje = datetime.now()
         OracleConnection = oracleConnection()
-        OracleConnection.cursor.execute('SELECT * FROM loteEstoque')
+        OracleConnection.cursor.execute('SELECT LoteEstoqueID, loteID, EstoqueID, QuantidadeUsada FROM loteEstoque WHERE (Excluido = 0 or Excluido = NULL) and dataExclusao > :1'(dataHoje))
         lista = OracleConnection.cursor.fetchall()
         OracleConnection.kill()
         return lista
@@ -46,4 +49,15 @@ class loteEstoque:
         for row in dados:
             table.add_row(row)
         print(table)
+
+    @staticmethod
+    def excluir_loteEstoque():
+        loteEstoque.listar_loteEstoque_pretty_table()
+        loteEstoqueID = int(input("ID do loteEstoque a ser excluído: "))
+        dataHoje = datetime.now()
+        try:
+            OracleConnection = oracleConnection()
+            OracleConnection.cursor.execute('Update loteEstoque SET Excluido = :1, dataExclusao = :2  where loteEstoqueID = :3'(1, dataHoje, loteEstoqueID))
+        except Exception as e:
+            print("erro: Nâo foi possível excluir o ingrediente")
 

@@ -14,7 +14,7 @@ class custosGerais:
     @staticmethod
     def listar_custosGerais():
         OracleConnection = oracleConnection()
-        OracleConnection.cursor.execute('SELECT * FROM CustosGerais')
+        OracleConnection.cursor.execute('SELECT CustoGeralID, Descricao, ValorPorcentagem, Identificador FROM CustosGerais')
         lista = OracleConnection.cursor.fetchall()
         OracleConnection.kill()
         return lista

@@ -1,5 +1,6 @@
 from dbConnection import oracleConnection
 from prettytable import PrettyTable
+from datetime import datetime
 
 class receita:
     @staticmethod
@@ -11,8 +12,9 @@ class receita:
 
     @staticmethod
     def listar_receitas():
+        dataHoje = datetime.now()
         OracleConnection = oracleConnection()
-        OracleConnection.cursor.execute('SELECT * FROM receita')
+        OracleConnection.cursor.execute('SELECT ReceitaID, ValorVenda, Nome FROM receita WHERE (Excluido = 0 or Excluido = NULL) and dataExclusao > :1'(dataHoje))
         lista = OracleConnection.cursor.fetchall()
         OracleConnection.kill()
         return lista
@@ -25,4 +27,15 @@ class receita:
         for row in dados:
             table.add_row(row)
         print(table)
-        
+
+    @staticmethod
+    def excluir_receita():
+        receita.listar_receitas_pretty_table()
+        receitaID = int(input("ID da receita a ser excluída: "))
+        dataHoje = datetime.now()
+        try:
+            OracleConnection = oracleConnection()
+            OracleConnection.cursor.execute('Update receita SET Excluido = :1, dataExclusao = :2 where receitaID = :3'(1, dataHoje, receitaID))
+        except Exception as e:
+            print("erro: Nâo foi possível excluir o ingrediente")
+      
