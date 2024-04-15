@@ -29,6 +29,7 @@ class unidade:
         try:
             OracleConnection = oracleConnection()
             OracleConnection.cursor.execute('Update unidade SET Excluido = :1, dataExclusao = :2 where unidadeID = :3'(1, dataHoje, unidadeID))
+            OracleConnection.kill()       
         except Exception as e:
-            print("erro: Nâo foi possível excluir o ingrediente")
+            print("erro: Nâo foi possível excluir a unidade")
       

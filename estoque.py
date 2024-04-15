@@ -53,5 +53,6 @@ class estoque:
         try:
             OracleConnection = oracleConnection()
             OracleConnection.cursor.execute('Update estoque SET Excluido = :1, dataExclusao = :2  where estoqueID = :3'(1, dataHoje, estoqueID))
+            OracleConnection.kill()
         except Exception as e:
-            print("erro: Nâo foi possível excluir o ingrediente")
+            print("erro: Nâo foi possível excluir o estoque")

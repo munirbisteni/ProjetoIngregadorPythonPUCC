@@ -58,6 +58,7 @@ class loteEstoque:
         try:
             OracleConnection = oracleConnection()
             OracleConnection.cursor.execute('Update loteEstoque SET Excluido = :1, dataExclusao = :2  where loteEstoqueID = :3'(1, dataHoje, loteEstoqueID))
+            OracleConnection.kill()
         except Exception as e:
-            print("erro: Nâo foi possível excluir o ingrediente")
+            print("erro: Nâo foi possível excluir o loteEstoque")
 

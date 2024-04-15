@@ -36,6 +36,15 @@ class receita:
         try:
             OracleConnection = oracleConnection()
             OracleConnection.cursor.execute('Update receita SET Excluido = :1, dataExclusao = :2 where receitaID = :3'(1, dataHoje, receitaID))
+            OracleConnection.kill()
         except Exception as e:
-            print("erro: Nâo foi possível excluir o ingrediente")
+            print("erro: Nâo foi possível excluir a receita")
       
+    @staticmethod
+    def alterar_ValorVenda():
+        receita.listar_receitas_pretty_table()
+        receitaID = int(input("ID da receita a ser excluída: "))
+        novoValor = float(input("Novo valor de venda da receita: "))
+        OracleConnection = oracleConnection()
+        OracleConnection.cursor.execute('Update receita SET ValorVenda = :1 where receitaID = :2'(novoValor, receitaID))
+  

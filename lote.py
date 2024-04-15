@@ -48,5 +48,15 @@ class lote:
         try:
             OracleConnection = oracleConnection()
             OracleConnection.cursor.execute('Update lote SET Excluido = :1, dataExclusao = :2  where loteID = :3'(1, dataHoje, loteID))
+            OracleConnection.kill()    
         except Exception as e:
-            print("erro: Nâo foi possível excluir o ingrediente")
+            print("erro: Nâo foi possível excluir o lote")
+
+    @staticmethod
+    def alterar_ValorProducao():
+        lote.listar_lote_pretty_table()
+        loteID = int(input("ID do lote a ser excluída: "))
+        novoValor = float(input("Novo valor de produção do lote: "))
+        OracleConnection = oracleConnection()
+        OracleConnection.cursor.execute('Update lote SET ValorProducao = :1 where loteID = :2'(novoValor, loteID))
+        OracleConnection.kill()

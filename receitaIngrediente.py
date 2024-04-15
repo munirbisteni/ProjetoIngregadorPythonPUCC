@@ -48,6 +48,7 @@ class receitaIngredientes:
         try:
             OracleConnection = oracleConnection()
             OracleConnection.cursor.execute('Update receitaIngredientes SET Excluido = :1, dataExclusao = :2 where receitaIngredienteID = :3'(1, dataHoje, receitaIngredienteID))
+            OracleConnection.kill()
         except Exception as e:
-            print("erro: Nâo foi possível excluir o ingrediente")
+            print("erro: Nâo foi possível excluir a receitaIngrediente")
       
