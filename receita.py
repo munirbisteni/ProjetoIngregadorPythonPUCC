@@ -6,7 +6,7 @@ class receita:
     def cadastrar_receita():
         nome = str(input("Nome receita: ")).strip()
         OracleConnection = oracleConnection()
-        OracleConnection.cursor.execute('Insert into Receita(nome,valor) values (:1, :2)', (nome, 0))
+        OracleConnection.cursor.execute('Insert into Receita(nome,valorVenda) values (:1, :2)', (nome, 0))
         OracleConnection.kill()
 
     @staticmethod
