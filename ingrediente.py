@@ -1,12 +1,12 @@
 from dbConnection import oracleConnection
 from prettytable import PrettyTable
-
+from unidade import unidade
 class ingrediente:
     @staticmethod
     def cadastrar_ingrediente():
         nomeIngrediente = str(input("Nome do produto: ")).strip()
         alergenico = bool(input("É alergenico?(True/False)"))
-        print(alergenico)
+        unidade.listar_unidade_pretty_table()
         unidadeID = int(input("Qual a unidade de medida desse ingrediente(id):"))
         OracleConnection = oracleConnection()
         OracleConnection.cursor.execute('Insert into Ingrediente(nome,alergenico,UnidadeID) values (:1, :2, :3)', (nomeIngrediente, alergenico, unidadeID))
