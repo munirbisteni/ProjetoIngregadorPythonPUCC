@@ -22,6 +22,9 @@ class loteEstoque:
                     OracleConnection.kill()
                 except Exception as e:
                     print("occoreu um erro ao cadastrar este loteEstoque, verifique a validade dos dados!")
+                    print("Verifique se o ingrediente é usado na receita referente ao lote!")
+                    print("Verifique também se o estoque contém quantidade suficiente para a produção desse lote!")
+
         if LoteID != -1:
             OracleConnection = oracleConnection()
             OracleConnection.cursor.execute('UPDATE Lote set CADASTROLOTEESTOQUECONCLUIDO = :1 WHERE LOTEID = :2', (1, LoteID))
