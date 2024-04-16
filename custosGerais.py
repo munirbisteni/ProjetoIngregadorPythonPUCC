@@ -27,3 +27,5 @@ class custosGerais:
         for row in dados:
             table.add_row(row)
         print(table)
+        # if print(dados[0][2]) < 100:
+        #     print(f"Lucro: {dados[0][2]} Lucro muito alto!")

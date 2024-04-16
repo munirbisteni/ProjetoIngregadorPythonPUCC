@@ -122,9 +122,9 @@ BEGIN
         SELECT ValorPorcentagem/100 into CF FROM CustosGerais WHERE Identificador = 'CF';
         SELECT ValorPorcentagem/100 into IMPOSTO FROM CustosGerais WHERE Identificador = 'IMPOSTO';
         ML := (:NEW.ValorProducao/:NEW.QuantidadeProduzida * ML);
-        CF := CF * ML;
+        CF := CF * ML; 
         IMPOSTO := IMPOSTO * ML;
-        v_venda_lote := ML + CF + IMPOSTO;
+        v_venda_lote := ML + CF + IMPOSTO; 
         
         IF v_venda_lote > v_venda_atual THEN
             UPDATE Receita SET ValorVenda = v_venda_lote WHERE ReceitaID = :NEW.RECEITAID;

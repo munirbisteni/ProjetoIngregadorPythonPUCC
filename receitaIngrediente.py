@@ -15,7 +15,7 @@ class receitaIngredientes:
             elif concluiuCadastroIngredientes != 0:
                 receita.listar_receitas_pretty_table()
                 receitaID = int(input("Escolha o ID da receita que adicionará um item: "))
-                ingrediente.listar_receitas_pretty_table()
+                ingrediente.listar_ingredientes_pretty_table()
                 ingredienteID = int(input("Escolha o ID do ingrediente que é usado na receita: "))
                 quantidade = int(input("Escreva a quantidade que é usado do ingrediente na receita por unidade: "))
                 OracleConnection = oracleConnection()

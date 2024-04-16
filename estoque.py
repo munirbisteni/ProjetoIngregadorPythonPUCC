@@ -13,7 +13,7 @@ class estoque:
             if parar == 3:
                 break
             elif parar == 1:
-                ingrediente.listar_receitas_pretty_table()
+                ingrediente.listar_ingredientes_pretty_table()
             elif parar == 2:
                 ingredienteID = int(input("Id do ingrediente: "))
                 valorDeCompra = float(input("Preco total pago: R$"))

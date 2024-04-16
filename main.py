@@ -19,7 +19,7 @@ def printOpcoes(nome):
     print(f"1 - Listar {nome}: ")
     print(f"2 - Cadastrar {nome}: ")
     print(f"3 - Excluir {nome}: ")
-    print(f"3 - Voltar: ")
+    print(f"0 - Voltar: ")
     return int(input("Sua escolha: "))
 
 while True:
@@ -95,9 +95,9 @@ while True:
             if len(lote.listar_lote()) >= 1:
                 lote.listar_lote_pretty_table()
                 input("Enter para continuar")
-        else:
-            print("Cadastre ao menos um lote antes!")
-            input("Enter para continuar")
+            else:
+                print("Cadastre ao menos um lote antes!")
+                input("Enter para continuar")
         if innerOption == 2:
             if len(receita.listar_receitas()) >=1:
                 lote.cadastrar_lote()
@@ -135,7 +135,7 @@ while True:
                 print("Cadastre ao menos um lote antes!")
                 input("Enter para continuar")
     elif opcao == 6:
-        innerOption = printOpcoes("loteEstoque:")
+        innerOption = printOpcoes("loteEstoque")
         if innerOption == 1:
             if len(loteEstoque.listar_loteEstoque()) >= 1:
                 loteEstoque.listar_loteEstoque_pretty_table()
@@ -154,8 +154,8 @@ while True:
             else:
                 print("Cadastre ao menos um loteEstoque!")
     elif opcao == 7:
-        print(f"3 - Alterar CustosGerais")
-        print(f"3 - Listar CustosGerais")
+        print(f"1 - Alterar CustosGerais")
+        print(f"2 - Listar CustosGerais")
         print(f"3 - Voltar ")
         innerOption = int(input("Sua escolha: "))
         if innerOption == 1:
