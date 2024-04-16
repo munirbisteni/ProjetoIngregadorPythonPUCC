@@ -53,7 +53,7 @@ while True:
     elif opcao == 2:
         innerOption = printOpcoes("ingrediente")
         if innerOption == 1:
-            if len(ingrediente.listar_ingredientes) >= 1:
+            if len(ingrediente.listar_ingredientes()) >= 1:
                 ingrediente.listar_ingredientes_pretty_table()
                 input("Enter para continuar")
             else:

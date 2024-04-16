@@ -49,4 +49,6 @@ INSERT INTO LoteEstoque(LoteID, EstoqueID) VALUES(2, 5);
 INSERT INTO LoteEstoque(LoteID, EstoqueID) VALUES(2, 1);
 INSERT INTO LoteEstoque(LoteID, EstoqueID) VALUES(2, 2);
 
-UPDATE Lote set lote.cadastroloteestoqueconcluido = 1 where loteID = 2;
+INSERT INTO UsuarioRoles (Descricao, identificador) VALUES ('Administrador', 'ADMIN');
+INSERT INTO UsuarioRoles (Descricao, identificador) VALUES ('Funcionario', 'FUNCIONARIO');
+INSERT INTO UsuarioRoles (Descricao, identificador) VALUES ('Cliente', 'CLIENTE');

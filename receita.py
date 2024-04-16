@@ -14,7 +14,7 @@ class receita:
     def listar_receitas():
         dataHoje = datetime.now()
         OracleConnection = oracleConnection()
-        OracleConnection.cursor.execute('SELECT ReceitaID, ValorVenda, Nome FROM receita WHERE (Excluido = 0 or Excluido = NULL) and dataExclusao > :1'(dataHoje))
+        OracleConnection.cursor.execute('SELECT ReceitaID, ValorVenda, Nome FROM receita WHERE (Excluido = 0 or Excluido IS NULL) and  (DATA_EXCLUSAO > :1 OR DATA_EXCLUSAO IS NULL )',(dataHoje,))
         lista = OracleConnection.cursor.fetchall()
         OracleConnection.kill()
         return lista
@@ -35,7 +35,7 @@ class receita:
         dataHoje = datetime.now()
         try:
             OracleConnection = oracleConnection()
-            OracleConnection.cursor.execute('Update receita SET Excluido = :1, dataExclusao = :2 where receitaID = :3'(1, dataHoje, receitaID))
+            OracleConnection.cursor.execute('Update receita SET Excluido = :1, DATA_EXCLUSAO = :2 where receitaID = :3',(1, dataHoje, receitaID))
             OracleConnection.kill()
         except Exception as e:
             print("erro: Nâo foi possível excluir a receita")
@@ -46,5 +46,5 @@ class receita:
         receitaID = int(input("ID da receita a ser excluída: "))
         novoValor = float(input("Novo valor de venda da receita: "))
         OracleConnection = oracleConnection()
-        OracleConnection.cursor.execute('Update receita SET ValorVenda = :1 where receitaID = :2'(novoValor, receitaID))
+        OracleConnection.cursor.execute('Update receita SET ValorVenda = :1 where receitaID = :2',(novoValor, receitaID))
   

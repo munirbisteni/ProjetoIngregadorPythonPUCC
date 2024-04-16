@@ -26,7 +26,7 @@ class receitaIngredientes:
     def listar_receitaIngredientes():
         dataHoje = datetime.now()
         OracleConnection = oracleConnection()
-        OracleConnection.cursor.execute('SELECT ReceitaIngredienteID, receitaID, IngredienteID, QuantidadeUsada FROM receitaIngredientes WHERE (Excluido = 0 or Excluido = NULL) and dataExclusao > :1'(dataHoje))
+        OracleConnection.cursor.execute('SELECT ReceitaIngredienteID, receitaID, IngredienteID, QuantidadeUsada FROM receitaIngredientes WHERE (Excluido = 0 or Excluido IS NULL) and  (DATA_EXCLUSAO > :1 OR DATA_EXCLUSAO IS NULL)',(dataHoje,))
         lista = OracleConnection.cursor.fetchall()
         OracleConnection.kill()
         return lista
@@ -47,7 +47,7 @@ class receitaIngredientes:
         dataHoje = datetime.now()
         try:
             OracleConnection = oracleConnection()
-            OracleConnection.cursor.execute('Update receitaIngredientes SET Excluido = :1, dataExclusao = :2 where receitaIngredienteID = :3'(1, dataHoje, receitaIngredienteID))
+            OracleConnection.cursor.execute('Update receitaIngredientes SET Excluido = :1, DATA_EXCLUSAO = :2 where receitaIngredienteID = :3',(1, dataHoje, receitaIngredienteID))
             OracleConnection.kill()
         except Exception as e:
             print("erro: Nâo foi possível excluir a receitaIngrediente")
