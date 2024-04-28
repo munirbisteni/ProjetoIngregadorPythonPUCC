@@ -1,0 +1,1 @@
+ALTER TABLE Receita ADD Descricao varchar2(200) 
