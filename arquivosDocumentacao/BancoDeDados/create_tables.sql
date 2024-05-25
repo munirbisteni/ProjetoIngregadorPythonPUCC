@@ -25,6 +25,7 @@ CREATE TABLE Usuario (
   UsuarioID NUMBER DEFAULT  Usuario_seq.NEXTVAL PRIMARY KEY NOT NULL,
   Nome VARCHAR2(100) NOT NULL,
   Senha VARCHAR2(1000) NOT NULL,
+  email VARCHAR2(200) UNIQUE, 
   CidadeID NUMBER NOT NULL,
   Endereco VARCHAR2(300) NOT NULL,
   UsuarioRoleID NUMBER DEFAULT 0,
@@ -124,6 +125,9 @@ CREATE TABLE LoteEstoque(
   CONSTRAINT fk_LoteEstoque_loteID FOREIGN KEY (EstoqueID) REFERENCES Estoque(EstoqueID)
 );
 
+
+ALTER TABLE usuario
+ADD email VARCHAR2(200) UNIQUE;
 
 DROP TABLE Lote
 Drop Table Estoque

@@ -1,6 +1,6 @@
-from dbConnection import oracleConnection
+from dbConnection import OracleConnection
 from prettytable import PrettyTable
-from unidade import unidade
+from unidade import Unidade
 from datetime import datetime
 class Ingrediente:
     @staticmethod
@@ -13,19 +13,19 @@ class Ingrediente:
                 return
 
         alergenico = bool(input("É alergenico?(True/False)"))
-        unidade.listar_unidade_pretty_table()
+        Unidade.listar_unidade_pretty_table()
         unidadeID = int(input("Qual a unidade de medida desse ingrediente(id):"))
-        OracleConnection = oracleConnection()
-        OracleConnection.cursor.execute('Insert into Ingrediente(nome,alergenico,UnidadeID) values (:1, :2, :3)', (nomeIngrediente, alergenico, unidadeID))
-        OracleConnection.kill()
+        oracleConnection = OracleConnection()
+        oracleConnection.cursor.execute('Insert into Ingrediente(nome,alergenico,UnidadeID) values (:1, :2, :3)', (nomeIngrediente, alergenico, unidadeID))
+        oracleConnection.kill()
     
     @staticmethod
     def listar_ingredientes():
         dataHoje = datetime.now()
-        OracleConnection = oracleConnection()
-        OracleConnection.cursor.execute('SELECT IngredienteID, Nome, Alergenico, UnidadeID FROM ingrediente WHERE (Excluido = 0 or Excluido IS NULL) and (DATA_EXCLUSAO > :1 OR DATA_EXCLUSAO IS NULL)',(dataHoje,))
-        lista = OracleConnection.cursor.fetchall()
-        OracleConnection.kill()
+        oracleConnection = OracleConnection()
+        oracleConnection.cursor.execute('SELECT i.IngredienteID, i.Nome, i.Alergenico, u.IDENTIFICADOR FROM ingrediente i INNER JOIN Unidade u ON u.unidadeID = i.unidadeID WHERE (i.Excluido = 0 or i.Excluido IS NULL) and (i.DATA_EXCLUSAO > :1 OR i.DATA_EXCLUSAO IS NULL)',(dataHoje,))
+        lista = oracleConnection.cursor.fetchall()
+        oracleConnection.kill()
         return lista
     
     @staticmethod
@@ -43,7 +43,8 @@ class Ingrediente:
         ingredienteID = int(input("ID do ingrediente a ser excluído: "))
         dataHoje = datetime.now()
         try:
-            OracleConnection = oracleConnection()
-            OracleConnection.cursor.execute('Update ingrediente SET Excluido = :1, DATA_EXCLUSAO = :2  where ingredienteID = :3',(1, dataHoje, ingredienteID))
+            oracleConnection = OracleConnection()
+            oracleConnection.cursor.execute('Update ingrediente SET Excluido = :1, DATA_EXCLUSAO = :2  where ingredienteID = :3',(1, dataHoje, ingredienteID))
+            oracleConnection.kill()
         except Exception as e:
             print("erro: Nâo foi possível excluir o ingrediente")
