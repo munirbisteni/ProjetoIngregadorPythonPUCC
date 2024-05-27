@@ -62,7 +62,6 @@ class Lote:
 
     @staticmethod
     def excluir_lote(loteID):
-        Lote.listar_lote_pretty_table()
         dataHoje = datetime.now()
         try:
             oracleConnection = OracleConnection()

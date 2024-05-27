@@ -1,7 +1,5 @@
 import sys
 
-
-
 sys.path.append('./backEnd')
 from usuario import Usuario
 
@@ -29,10 +27,9 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from mainClienteWindow import MainClienteWindow
-from mainAdminWindow import MainAdminWindow
 from funcionario.mainFuncionarioWindow import MainFuncionarioWindow
-
+from cliente.mainClienteWindow import ClienteWindow
+from admin.mainAdminWindow import MainAdminWindow
 from registrarClienteWindow import MainRegistrarCliente
 from mensagemWindow import MensagemWindow
 
@@ -82,7 +79,7 @@ class MainWindow(QMainWindow):
         if response != False:
             self.close()
             if response == "CLIENTE":
-                self.loginSucces = MainClienteWindow()
+                self.loginSucces = ClienteWindow()
                 self.loginSucces  .show()
             elif response == "FUNCIONARIO":
                 self.loginSucces = MainFuncionarioWindow()

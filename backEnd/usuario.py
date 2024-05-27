@@ -1,40 +1,54 @@
 from dbConnection import OracleConnection
 from criptografia import Criptografia
+from datetime import datetime
+
 class Usuario:
     @staticmethod
     def cadastrar_usuario_cliente(nome, email, senha, endereco, cidadeID):
         usuarioroleID = 3
         oracleConnection = OracleConnection()
         oracleConnection.cursor.execute('Insert into Usuario(nome,email,senha,cidadeID, endereco, usuarioroleID) values (:1, :2, :3, :4, :5, :6)', (nome,email, senha, cidadeID, endereco, usuarioroleID))
+        oracleConnection.connection.commit()
+        oracleConnection.kill()
+            
+    @staticmethod
+    def cadastrar_usuario(role,nome, email, senha, endereco, cidadeID):
+        oracleConnection = OracleConnection()
+        oracleConnection.cursor.execute('Insert into Usuario(usuarioroleID, nome,email,senha,cidadeID, endereco) values (:1, :2, :3, :4, :5, :6)', (role,nome, email,senha, cidadeID, endereco))
+        oracleConnection.connection.commit()
         oracleConnection.kill()
     
     @staticmethod
-    def cadastrar_usuario_funcionario():
-        nome = input("Escreva o seu nome:")
-        senha = input("Escreva a sua senha:")
-        cripto = Criptografia()
-        senha = cripto.criptografar_dado(senha)
-        #cidade.listar_cidade_pretty_table()
-        cidadeID = input("escreva o número da sua cidade:")
-        endereco = input("escreva o seu endereço")
-        usuarioroleID = 2
+    def alterar_dados_usuario(role,nome, email, endereco, usuarioID):
         oracleConnection = OracleConnection()
-        oracleConnection.cursor.execute('Insert into Usuario(nome,senha,cidadeID, endereco, usuarioroleID) values (:1, :2, :3, :4, :5)', (nome, senha, cidadeID, endereco, usuarioroleID))
+        oracleConnection.cursor.execute('UPDATE Usuario set nome = :1, email = :2, endereco = :4, usuarioRoleID = :5 where UsuarioID = :6 ', (nome, email, endereco, role, usuarioID))
+        oracleConnection.connection.commit()
         oracleConnection.kill()
-    
+
     @staticmethod
-    def cadastrar_usuario_administrador():
-        nome = input("Escreva o seu nome:")
-        senha = input("Escreva a sua senha:")
-        cripto = Criptografia()
-        senha = cripto.criptografar_dado(senha)
-        #cidade.listar_cidade_pretty_table()
-        cidadeID = input("escreva o número da sua cidade:")
-        endereco = input("escreva o seu endereço")
-        usuarioroleID = 1
+    def alterar_usuario(role,nome, email, senha, endereco, usuarioID):
         oracleConnection = OracleConnection()
-        oracleConnection.cursor.execute('Insert into Usuario(nome,senha,cidadeID, endereco, usuarioroleID) values (:1, :2, :3, :4, :5)', (nome, senha, cidadeID, endereco, usuarioroleID))
+        oracleConnection.cursor.execute('UPDATE Usuario set nome = :1, email = :2, senha = :3, endereco = :4, usuarioRoleID = :5 where UsuarioID = :6 ', (nome, email,senha, endereco, role, usuarioID))
+        oracleConnection.connection.commit()
         oracleConnection.kill()
+        
+    @staticmethod
+    def listar_usuarios():
+        dataHoje = datetime.now()
+        oracleConnection = OracleConnection()
+        oracleConnection.cursor.execute('Select u.usuarioID, u.Nome, u.email, u.endereco, r.Descricao, u.cidadeID from usuario u INNER JOIN UsuarioRoles r ON r.usuarioRoleID = u.UsuarioRoleID WHERE (u.Excluido = 0 or u.Excluido IS NULL) and  (u.DATA_EXCLUSAO > :1 OR u.DATA_EXCLUSAO IS NULL )', (dataHoje,))
+        resultado = oracleConnection.cursor.fetchall()
+        oracleConnection.kill()
+        return resultado
+
+    def excluir_usuario(usuarioID):
+        dataHoje = datetime.now()
+        try:
+            oracleConnection = OracleConnection()
+            oracleConnection.cursor.execute('Update usuario SET Excluido = :1, DATA_EXCLUSAO = :2  where loteID = :3',(1, dataHoje, usuarioID))
+            oracleConnection.kill()    
+        except Exception as e:
+            print("erro: Nâo foi possível excluir o ususário")
 
     @staticmethod
     def validar_login(login, senha):
