@@ -27,6 +27,8 @@ from PyQt6.QtWidgets import (
     QGridLayout
 )
 from admin.usuarioFrontEnd.usuarioWindow import UsuarioWindow
+from admin.receitaFrontEnd.receitaWindow import ReceitaWindow
+from admin.ingredienteFrontEnd.ingredienteWindow import IngredienteWindow
 class MainAdminWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -57,9 +59,9 @@ class MainAdminWindow(QMainWindow):
         self.selectedOption.show()
 
     def btn_receitaClick(self):
-        self.selectedOption = LoteWindow()
+        self.selectedOption = ReceitaWindow()
         self.selectedOption.show()
 
     def btn_ingredienteClick(self):
-        self.selectedOption = LoteWindow()
+        self.selectedOption = IngredienteWindow()
         self.selectedOption.show()

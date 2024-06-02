@@ -27,7 +27,7 @@ from PyQt6.QtWidgets import (
     QGridLayout
 )
 from .cadastrarReceitaWindow import CadastrarReceitaWindow
-from .listarReceitasWindow import ListarReceitaWindow
+from .listarReceitasWindow import ListarReceitasWindow
 
 class ReceitaWindow(QMainWindow):
     def __init__(self):
@@ -52,10 +52,10 @@ class ReceitaWindow(QMainWindow):
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
 
-    def btn_listarClick(self):
+    def btn_CadastrarClick(self):
         self.selectedOption = CadastrarReceitaWindow()
         self.selectedOption.show()
 
-    def btn_CadastrarClick(self):
-        self.selectedOption = ListarReceitaWindow()
+    def btn_listarClick(self):
+        self.selectedOption = ListarReceitasWindow()
         self.selectedOption.show()

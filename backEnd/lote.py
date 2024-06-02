@@ -7,7 +7,6 @@ import oracledb
 class Lote:
     @staticmethod
     def cadastrar_lote(receitaID, dtProducao, dtVencimento, qtdProduzida):
-        Receita.listar_receitas_pretty_table()
         dataProducao = dtProducao.toPyDate()
         dataValidade = dtVencimento.toPyDate()
         qtdRestante = qtdProduzida
@@ -82,7 +81,6 @@ class Lote:
 
     @staticmethod
     def atualizar_lote(loteID, receitaID, dtProducao, dtVencimento, qtdProduzida):
-        Receita.listar_receitas_pretty_table()
         dataProducao = dtProducao.toPyDate()
         dataValidade = dtVencimento.toPyDate()
         qtdRestante = qtdProduzida

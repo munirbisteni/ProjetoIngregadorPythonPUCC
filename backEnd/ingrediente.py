@@ -4,19 +4,9 @@ from unidade import Unidade
 from datetime import datetime
 class Ingrediente:
     @staticmethod
-    def cadastrar_ingrediente():
-        nomeIngrediente = str(input("Nome do ingrediente: ")).strip()
-        lista = Ingrediente.listar_ingredientes()
-        for item in lista:
-            if item[1] == nomeIngrediente:
-                print("Ingrediente já cadastrado!")
-                return
-
-        alergenico = bool(input("É alergenico?(True/False)"))
-        Unidade.listar_unidade_pretty_table()
-        unidadeID = int(input("Qual a unidade de medida desse ingrediente(id):"))
+    def cadastrar_ingrediente(nome,alergenico, unidadeID):
         oracleConnection = OracleConnection()
-        oracleConnection.cursor.execute('Insert into Ingrediente(nome,alergenico,UnidadeID) values (:1, :2, :3)', (nomeIngrediente, alergenico, unidadeID))
+        oracleConnection.cursor.execute('Insert into Ingrediente(nome,alergenico,UnidadeID) values (:1, :2, :3)', (nome, alergenico, unidadeID))
         oracleConnection.kill()
     
     @staticmethod
@@ -38,9 +28,25 @@ class Ingrediente:
         print(table)
     
     @staticmethod
-    def excluir_ingrediente():
-        Ingrediente.listar_receitas_pretty_table()
-        ingredienteID = int(input("ID do ingrediente a ser excluído: "))
+    def alterar_ingrediente(nome,alergenico,unidadeID, ingredienteID):
+        oracleConnection = OracleConnection()
+        try:
+            oracleConnection.cursor.execute("""UPDATE ingrediente
+                                                SET NOME = :1,
+                                                    ALERGENICO = :2,
+                                                    UNIDADEID = :3
+                                                WHERE
+                                                    INGREDIENTEID = :4""", (nome, alergenico, unidadeID, ingredienteID))
+            oracleConnection.connection.commit()
+            oracleConnection.kill()
+            return True
+        
+        except Exception as e:
+            print("Erro ao alterar ingrediente:", e)
+            return False
+        
+    @staticmethod
+    def excluir_ingrediente(ingredienteID):
         dataHoje = datetime.now()
         try:
             oracleConnection = OracleConnection()

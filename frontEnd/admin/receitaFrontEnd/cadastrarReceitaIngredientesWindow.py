@@ -3,8 +3,9 @@ import sys
 sys.path.append('./backEnd')
 from lote import Lote
 from loteEstoque import LoteEstoque
-from receita import Receita
-from estoque import Estoque
+from receitaIngrediente import ReceitaIngredientes
+
+from ingrediente import Ingrediente
 from utilities import Utilities
 from PyQt6.QtCore import Qt
 from PyQt6.QtCore import QDate
@@ -33,35 +34,34 @@ from PyQt6.QtWidgets import (
 from mensagemWindow import MensagemWindow
 
 class CadastrarReceitaIngredientesWindow(QMainWindow):
-    def __init__(self, loteID,receitaID):
+    def __init__(self, receitaID):
         super().__init__()
-        self.loteID = loteID
         self.receitaID = receitaID
         
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Cadastrar ingredientes da receita")
         self.setGeometry(100, 100, 400, 200)
         
         self.layout = QVBoxLayout()
         self.widgets = {
-                    "cmb_estoque":QComboBox(),
-                    "btn_novoLoteEstoque":QPushButton("Cadastrar este estoque como usado no lote"),   
+                    "cmb_ingredientes":QComboBox(),
+                        "lbl_ingredientes":QLabel("Os ingredientes usados aparecerão aqui"),
+                    "lbl_qtdUsada":QLabel(f"Quantidade usada:"),
+                    "intp_qtdUsada":QDoubleSpinBox(),
+                    "btn_cadastrarIngrediente":QPushButton("Cadastrar este ingrediente"),   
                     "btn_concluir":QPushButton("Concluir")
                 }
         
-        estoque = Estoque.listar_estoque_by_receita(self.receitaID)
+        ingredientes = Ingrediente.listar_ingredientes()
+        
+        self.widgets["intp_qtdUsada"].setRange(0.0, 999.99)
+        self.widgets["intp_qtdUsada"].setMinimumWidth(self.widgets["intp_qtdUsada"].fontMetrics().horizontalAdvance("999.99"))
+        
+        self.widgets["cmb_ingredientes"].addItem(" - ", 0)
+        for item in ingredientes:
+            self.widgets["cmb_ingredientes"].addItem(f"{item[1]} - medida: {item[3]}", item[0])
 
-        if len(estoque) == 0:
-            self.widgets["cmb_estoque"].addItem("Não há estoques para esse lote")
-            self.widgets["btn_novoLoteEstoque"].clicked.connect(self.btn_erroClick)
-            self.widgets["btn_concluir"].clicked.connect(self.btn_erroClick)
-
-        else:
-            self.widgets["cmb_estoque"].addItem(" - ", 0)
-            for item in estoque:
-                self.widgets["cmb_estoque"].addItem("Produto: "+ str(item[0] +" Data validade:" + item[5].strftime("%d/%m/%Y") + " EstoqueID: " + str(item[1])), item[1])
-
-            self.widgets["btn_novoLoteEstoque"].clicked.connect(self.btn_novoLoteEstoqueClick)
-            self.widgets["btn_concluir"].clicked.connect(self.btn_concluirCadastroClick)
+        self.widgets["btn_cadastrarIngrediente"].clicked.connect(self.btn_cadastrarIngredienteClick)
+        self.widgets["btn_concluir"].clicked.connect(self.btn_concluirCadastroClick)
 
         for w in self.widgets.values():
             self.layout.addWidget(w)
@@ -71,15 +71,20 @@ class CadastrarReceitaIngredientesWindow(QMainWindow):
 
         self.setCentralWidget(widget)   
 
-    def onDataProducaoClick(self):
-         self.widgets["dt_vencimento"].setMinimunDate(self.widgets["dt_producao"].date())
+    def lbl_ingredientesUsadosAtt(self):
+        receitaIngredientes = ReceitaIngredientes.listar_receitaIngredientesByID(self.receitaID)
+        formatado = ""
+        for item in receitaIngredientes:
+            formatado += f"{item[1]}, Usado: {item[2]} - {item[3]}\n"
+        self.widgets["lbl_ingredientes"].setText(formatado)
 
-
-    def btn_novoLoteEstoqueClick(self):
+         
+    def btn_cadastrarIngredienteClick(self):
 
         dadosCadastrais = {
-                "loteID": self.loteID,
-                "cmb_estoque":  self.widgets["cmb_estoque"].currentData()
+                "receitaID": self.receitaID,
+                "cmb_ingredientes": self.widgets["cmb_ingredientes"].currentData(),
+                "intp_qtdUsada": "{:.2f}".format(self.widgets["intp_qtdUsada"].value()),
             }        
         flagPreenchido = Utilities.verificarPreenchido(dadosCadastrais)
         if flagPreenchido == False:
@@ -87,22 +92,13 @@ class CadastrarReceitaIngredientesWindow(QMainWindow):
                 self.msg.show()
         
         else:
-            res = LoteEstoque.cadastrar_loteEstoque(dadosCadastrais["loteID"],dadosCadastrais["cmb_estoque"])
-            if res:
-                self.msg = MensagemWindow(False,"Dado cadastrado com sucesso")
-                self.msg.show()
-            else:
-                self.msg = MensagemWindow(True,"Dados preenchidos incorretamente")
-                self.msg.show()
-        
-    def btn_erroClick(self):
-        self.msg = MensagemWindow(True,"Este lote não será cadastrado por falta de ingredientes em estoque")
-        self.msg.show()
-        Lote.excluir_lote(self.loteID)
-        self.close()    
-    
+            ReceitaIngredientes.cadastrar_receitaIngredientes(dadosCadastrais["receitaID"],dadosCadastrais["cmb_ingredientes"], dadosCadastrais["intp_qtdUsada"])
+            self.msg = MensagemWindow(False,"Dado cadastrado com sucesso")
+            self.lbl_ingredientesUsadosAtt()
+            self.msg.show()
+
+
     def btn_concluirCadastroClick(self):
-        Lote.definir_CadastroConcluidoLote(self.loteID)
         self.msg = MensagemWindow(False,"Cadastro concluído com sucesso!")
         self.msg.show()
         self.close()    

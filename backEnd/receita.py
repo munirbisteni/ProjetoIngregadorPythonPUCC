@@ -2,16 +2,24 @@ from dbConnection import OracleConnection
 from prettytable import PrettyTable
 from datetime import datetime
 from criptografia import Criptografia
+import oracledb
+
 class Receita:
     @staticmethod
-    def cadastrar_receita():
-        nome = str(input("Nome receita: ")).strip()
-        descricao = str(input("De uma descição breve da receita (max 50 caractéres):")).strip()
-        cripto = Criptografia()
-        descricao = cripto.criptografar(descricao)
+    def cadastrar_receita(nome, descricao):
         oracleConnection = OracleConnection()
-        oracleConnection.cursor.execute('Insert into Receita(nome,valorVenda,descricao) values (:1, :2, :3)', (nome, 0,descricao))
-        oracleConnection.kill()
+
+        try:
+            receita_id = oracleConnection.cursor.var(oracledb.NUMBER)
+            oracleConnection.cursor.execute('Insert into Receita(nome,valorVenda,descricao) values (:1, :2, :3) RETURNING receitaID INTO :4', (nome, 0,descricao, receita_id))
+            oracleConnection.connection.commit()
+            oracleConnection.kill()
+            return receita_id.getvalue()[0]
+        
+        except Exception as e:
+            print("Erro ao cadastrar receita:", e)
+            return None
+
 
     @staticmethod
     def listar_receitas():
@@ -41,22 +49,18 @@ class Receita:
         print(table)
 
     @staticmethod
-    def excluir_receita():
-        Receita.listar_receitas_pretty_table()
-        receitaID = int(input("ID da receita a ser excluída: "))
+    def excluir_receita(receitaID):
         dataHoje = datetime.now()
         try:
-            OracleConnection = OracleConnection()
-            OracleConnection.cursor.execute('Update receita SET Excluido = :1, DATA_EXCLUSAO = :2 where receitaID = :3',(1, dataHoje, receitaID))
-            OracleConnection.kill()
+            oracleConnection = OracleConnection()
+            oracleConnection.cursor.execute('Update receita SET Excluido = :1, DATA_EXCLUSAO = :2 where receitaID = :3',(1, dataHoje, receitaID))
+            oracleConnection.kill()
         except Exception as e:
             print("erro: Nâo foi possível excluir a receita")
       
     @staticmethod
-    def alterar_ValorVenda():
-        Receita.listar_receitas_pretty_table()
-        receitaID = int(input("ID da receita a ser excluída: "))
-        novoValor = float(input("Novo valor de venda da receita: "))
+    def alterar_receita(nome, descricao,valorVenda,receitaID):
         oracleConnection = OracleConnection()
-        oracleConnection.cursor.execute('Update receita SET ValorVenda = :1 where receitaID = :2',(novoValor, receitaID))
-  
+        oracleConnection.cursor.execute('Update receita SET nome = :1, Descricao = :2, ValorVenda = :3 where receitaID = :4',(nome, descricao, valorVenda, receitaID))
+        oracleConnection.connection.commit()
+        oracleConnection.kill()

@@ -26,7 +26,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QGridLayout
 )
-from .listarIngredientesWindow import ListarIngredienteWindow
+from .listarIngredientesWindow import ListarIngredientesWindow
 from .cadastrarIngredienteWindow import CadastrarIngredienteWindow
 
 class IngredienteWindow(QMainWindow):
@@ -53,7 +53,7 @@ class IngredienteWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
     def btn_listarClick(self):
-        self.selectedOption = ListarIngredienteWindow()
+        self.selectedOption = ListarIngredientesWindow()
         self.selectedOption.show()
 
     def btn_cadastrarClick(self):

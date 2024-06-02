@@ -65,12 +65,12 @@ class ListarUsuarioWindow(QMainWindow):
         self.selectedOption = AlterarUsuarioWindow(usuario)
         self.selectedOption.window_closed.connect(self.populate_table)
         self.selectedOption.show()
-        print(f"Alterar Estoque: {usuario}")
+        print(f"Alterar Usuário: {usuario}")
 
     def excluir(self, usuario):
         Usuario.excluir_usuario(usuario[0])
         self.msg = MensagemWindow(False,f"usuario de id {usuario[0]} excluído com sucesso")
         self.msg.show()
-        print(f"Excluir Estoque: {usuario}")
+        print(f"Excluir Usuário: {usuario}")
         self.populate_table()
 
