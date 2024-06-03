@@ -18,7 +18,7 @@ class ListarLoteWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Listar lotes")
         self.setGeometry(100, 100, 800, 600)
         
         self.layout = QVBoxLayout()

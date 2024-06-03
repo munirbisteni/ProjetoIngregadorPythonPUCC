@@ -3,12 +3,14 @@ from prettytable import PrettyTable
 
 class CustosGerais:
     @staticmethod
-    def alterarCustoGeral():
-        CustosGerais.listar_custosGerais_pretty_table()
-        custoID = int(input("Qual o custo geral que você deseja alterar(id):"))
-        porcentagem = float(input("Qual a nova porcentagem que ira substituir o valor atual(use '.' como separador, ex: 75.00):"))
+    def alterar_custos_gerais(ML,CF, IMP):
         oracleConnection = OracleConnection()
-        oracleConnection.cursor.execute('UPDATE custosGerais set VALORPORCENTAGEM = :1 where CUSTOGERALID = :2', (porcentagem, custoID))
+        oracleConnection.cursor.execute("""UPDATE custosGerais set VALORPORCENTAGEM = :1 where IDENTIFICADOR = 'ML'""", (ML, ))
+        oracleConnection.connection.commit()
+        oracleConnection.cursor.execute("""UPDATE custosGerais set VALORPORCENTAGEM = :1 where IDENTIFICADOR = 'CF'""", (CF, ))
+        oracleConnection.connection.commit()
+        oracleConnection.cursor.execute("""UPDATE custosGerais set VALORPORCENTAGEM = :1 where IDENTIFICADOR = 'IMPOSTO'""", (IMP, ))
+        oracleConnection.connection.commit()
         oracleConnection.kill()
 
     @staticmethod
@@ -27,5 +29,3 @@ class CustosGerais:
         for row in dados:
             table.add_row(row)
         print(table)
-        # if print(dados[0][2]) < 100:
-        #     print(f"Lucro: {dados[0][2]} Lucro muito alto!")

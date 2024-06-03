@@ -51,10 +51,10 @@ class CadastrarEstoqueWindow(QMainWindow):
                     "inp_valorCompra":QDoubleSpinBox(),
                     "btn_cadastrarEstoque":QPushButton("Cadastrar")   
                 }
-        self.widgets["inp_quantidadeComprada"].setRange(0.0, 999.99)
+        self.widgets["inp_quantidadeComprada"].setRange(0.0, 9999.99)
         self.widgets["inp_quantidadeComprada"].setMinimumWidth( self.widgets["inp_quantidadeComprada"].fontMetrics().horizontalAdvance("999.99"))
 
-        self.widgets["inp_valorCompra"].setRange(0.0, 999.99)
+        self.widgets["inp_valorCompra"].setRange(0.0, 9999.99)
         self.widgets["inp_valorCompra"].setMinimumWidth( self.widgets["inp_valorCompra"].fontMetrics().horizontalAdvance("999.99"))
 
         self.widgets["dt_validade"].setCalendarPopup(True)

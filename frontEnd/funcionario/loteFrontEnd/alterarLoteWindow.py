@@ -38,7 +38,7 @@ class AlterarLoteWindow(QMainWindow):
     def __init__(self, lote):
         super().__init__()
         self.lote = lote
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Alterar lote")
         self.setGeometry(100, 100, 400, 200)
         
        

@@ -1,82 +1,69 @@
-# import sys
+import sys
+from PyQt6.QtWidgets import (
+    QApplication,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QMainWindow,
+    QWidget,
+    QComboBox
+)
 
-# from PyQt6.QtWidgets import (
-#     QApplication,
-#     QPushButton,
-#     QTableWidget,
-#     QTableWidgetItem,
-#     QVBoxLayout,
-#     QMainWindow,
-#     QWidget,
-# )
+from mensagemWindow import MensagemWindow
+from pedido import Pedido
+class ListarPedidosWindow(QMainWindow):
 
-# from pedido import Pedido
-# from mensagemWindow import MensagemWindow
-# from .alterarPedidoWindow import AlterarPedidoWindow
-
-# class ListarPedidosWindow(QMainWindow):
-#     def _init_(self):
-#         super()._init_()
-
-#         self.setWindowTitle("Listar Pedidos")
-#         self.setGeometry(100, 100, 800, 600)
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Listar meus pedidos")
+        self.setGeometry(100, 100, 800, 600)
         
-#         self.layout = QVBoxLayout()
-#         self.table_widget = QTableWidget()
-#         self.layout.addWidget(self.table_widget)
+        self.layout = QVBoxLayout()
+        self.table_widget = QTableWidget()
+        self.layout.addWidget(self.table_widget)
 
-#         self.initUI()
+        self.initUI()
 
-#     def initUI(self):
-#         self.populate_table()
+    def initUI(self):
+        self.populate_table()
 
-#         widget = QWidget()
-#         widget.setLayout(self.layout)
-#         self.setCentralWidget(widget)
+        widget = QWidget()
+        widget.setLayout(self.layout)
+        self.setCentralWidget(widget)
     
-#     def populate_table(self):
-#         self.pedidos = Pedido.listar_pedidos()
-#         self.table_widget.setRowCount(len(self.pedidos))
-#         self.table_widget.setColumnCount(5)
-#         self.table_widget.setHorizontalHeaderLabels(["PedidoID", "Cliente", "Produto", "Data do Pedido", "Alterar", "Excluir"])
+    def populate_table(self):
+        self.pedidos = Pedido.listar_vendas()
+        self.statusVenda = Pedido.listar_statusVenda()
+        print(self.statusVenda)
+        cmb_status = QComboBox()
+        self.table_widget.setRowCount(len(self.pedidos))
+        self.table_widget.setColumnCount(3)
+        self.table_widget.setHorizontalHeaderLabels(["Valor total", "itens", "status "])
+        for row, pedido in enumerate(self.pedidos):
+            receita_nome_item = QTableWidgetItem(f"{pedido[1]}")
+            self.table_widget.setItem(row, 0, receita_nome_item)
 
-#         for row, pedido in enumerate(self.pedidos):
-#             pedido_id_item = QTableWidgetItem(f"{pedido[0]}")
-#             self.table_widget.setItem(row, 0, pedido_id_item)
+            itensPedido = Pedido.listar_pedidosVenda(pedido[0])
+            formatado = ""
+            for item in itensPedido:
+                formatado += f"{item[3]} - {item[2]} unidades\n"
+            descricao = QTableWidgetItem(f"{formatado}")
+            self.table_widget.setItem(row, 1, descricao)
 
-#             cliente_item = QTableWidgetItem(f"{pedido[1]}")
-#             self.table_widget.setItem(row, 1, cliente_item)
+            self.table_widget.resizeColumnToContents(1)            
+            self.table_widget.resizeRowToContents(row)
 
-#             produto_item = QTableWidgetItem(f"{pedido[2]}")
-#             self.table_widget.setItem(row, 2, produto_item)
+            cmb_status = QComboBox()
+            for index, item in enumerate(self.statusVenda):
+                cmb_status.addItem(item[1], item[0])
+                if item[0] == pedido[3]:
+                    cmb_status.setCurrentIndex(index)
+            cmb_status.currentIndexChanged.connect(lambda index, cmb=cmb_status: self.alterar_status(cmb.currentData(), pedido[0]))
+            self.table_widget.setCellWidget(row, 2, cmb_status)
 
-#             data_pedido_item = QTableWidgetItem(pedido[3].strftime("%d/%m/%Y"))
-#             self.table_widget.setItem(row, 3, data_pedido_item)
-
-#             alterar_button = QPushButton("Alterar")
-#             alterar_button.clicked.connect(lambda _, p=pedido: self.alterar_pedido(p))
-#             self.table_widget.setCellWidget(row, 4, alterar_button)
-
-#             excluir_button = QPushButton("Excluir")
-#             excluir_button.clicked.connect(lambda _, p=pedido: self.excluir_pedido(p))
-#             self.table_widget.setCellWidget(row, 5, excluir_button)
-
-#     def alterar_pedido(self, pedido):
-#         self.selectedOption = AlterarPedidoWindow(pedido)
-#         self.selectedOption.window_closed.connect(self.populate_table)
-#         self.selectedOption.show()
-
-#         print(f"Alterar pedido: {pedido}")
-
-#     def excluir_pedido(self, pedido):
-#         Pedido.excluir_pedido(pedido[0])
-#         self.msg = MensagemWindow(False, f"Pedido de id {pedido[0]} excluído com sucesso")
-#         self.msg.show()
-#         print(f"Excluir pedido: {pedido}")
-#         self.populate_table()
-
-# if _name_ == "_main_":
-#     app = QApplication(sys.argv)
-#     window = ListarPedidosWindow()
-#     window.show()
-#     sys.exit(app.exec())
+    def alterar_status(self, statusID, vendaID):
+        Pedido.alterar_status(vendaID, statusID)
+        self.msg = MensagemWindow(False,f"pedido de id {vendaID} alterado para o status de ID {statusID} com sucesso")
+        self.msg.show()
+        print(f"alterar pedido: {vendaID}")

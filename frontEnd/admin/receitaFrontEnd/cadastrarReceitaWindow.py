@@ -21,7 +21,7 @@ class CadastrarReceitaWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Cadastrar receita")
         self.setGeometry(100, 100, 400, 200)
         
         self.layout = QVBoxLayout()

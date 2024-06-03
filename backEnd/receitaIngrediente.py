@@ -38,7 +38,8 @@ class ReceitaIngredientes:
                                                 ri.ReceitaIngredienteID, 
                                                 i.nome, 
                                                 ri.QuantidadeUsada,
-                                                u.IDENTIFICADOR
+                                                u.IDENTIFICADOR,
+                                                i.alergenico
                                             FROM 
                                                 receitaIngredientes ri
                                             INNER JOIN

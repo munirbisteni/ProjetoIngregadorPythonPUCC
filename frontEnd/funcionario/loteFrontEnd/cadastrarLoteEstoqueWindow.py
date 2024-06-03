@@ -38,7 +38,7 @@ class CadastrarLoteEstoqueWindow(QMainWindow):
         self.loteID = loteID
         self.receitaID = receitaID
         
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Cadastrar Lote Estoque")
         self.setGeometry(100, 100, 400, 200)
         
         self.layout = QVBoxLayout()

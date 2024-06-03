@@ -17,9 +17,9 @@ class MensagemWindow(QMainWindow):
         }
         self.widgets["lbl_mensagem"].setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         if erro == False:
-            self.widgets["lbl_mensagem"].setStyleSheet("color: green")  # Define o estilo para sucesso
+            self.widgets["lbl_mensagem"].setStyleSheet("color: green") 
         elif erro == True:
-            self.widgets["lbl_mensagem"].setStyleSheet("color: red")  # Define o estilo para sucesso
+            self.widgets["lbl_mensagem"].setStyleSheet("color: red") 
         
         self.widgets["btn_fechar"].clicked.connect(self.fecharJanela)
 

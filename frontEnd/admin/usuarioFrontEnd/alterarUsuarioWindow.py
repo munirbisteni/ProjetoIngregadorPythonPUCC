@@ -41,7 +41,7 @@ class AlterarUsuarioWindow(QMainWindow):
     def __init__(self, usuario):
         super().__init__()
         self.usuario = usuario
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Alterar Usuário")
         self.setGeometry(100, 100, 400, 200)
         
         self.layout = QVBoxLayout()

@@ -20,6 +20,39 @@ class Receita:
             print("Erro ao cadastrar receita:", e)
             return None
 
+    @staticmethod
+    def listar_receitasDisponiveis():
+        dataHoje = datetime.now()
+        oracleConnection = OracleConnection()
+        oracleConnection.cursor.execute("""SELECT 
+                                                r.RECEITAID, 
+                                                r.VALORVENDA,
+                                                r.NOME, 
+                                                r.EXCLUIDO, 
+                                                r.DATA_EXCLUSAO, 
+                                                r.DESCRICAO
+                                            FROM 
+                                                receita r
+                                            WHERE 
+                                                r.RECEITAID IN 
+                                                (
+                                                    SELECT 
+                                                        l.RECEITAID
+                                                    FROM 
+                                                        lote l
+                                                    WHERE 
+                                                        l.CADASTROLOTEESTOQUECONCLUIDO = 1
+                                                    GROUP BY 
+                                                        l.RECEITAID
+                                                    HAVING 
+                                                        SUM(l.QUANTIDADERESTANTE) > 0
+                                                )                
+                                            AND (r.EXCLUIDO = 0 OR r.EXCLUIDO IS NULL)
+                                            AND (r.DATA_EXCLUSAO > :1 OR r.DATA_EXCLUSAO IS NULL)""", (dataHoje,))
+        resultado = oracleConnection.cursor.fetchall()
+        oracleConnection.kill()
+        return resultado
+
 
     @staticmethod
     def listar_receitas():

@@ -24,7 +24,7 @@ class AlterarIngredienteWindow(QMainWindow):
     def __init__(self, ingrediente):
         super().__init__()
         self.ingrediente = ingrediente
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Alterar ingredientes")
         self.setGeometry(100, 100, 400, 200)
         
         self.layout = QVBoxLayout()

@@ -27,7 +27,7 @@ class AlterarReceitaWindow(QMainWindow):
     def __init__(self, receita):
         super().__init__()
         self.receita = receita
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Alterar receita")
         self.setGeometry(100, 100, 400, 200)
         
         self.layout = QVBoxLayout()

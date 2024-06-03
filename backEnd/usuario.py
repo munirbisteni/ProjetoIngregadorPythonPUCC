@@ -55,11 +55,11 @@ class Usuario:
         cripto = Criptografia()
         senhaCriptografada = cripto.criptografar(senha)
         oracleConnection = OracleConnection()
-        oracleConnection.cursor.execute('Select ur.Identificador from Usuario u INNER JOIN UsuarioRoles ur ON ur.UsuarioRoleID = u.usuarioRoleID where u.email = :1 and u.senha = :2 order by u.nome FETCH FIRST 1 ROW ONLY',(login,senhaCriptografada))
+        oracleConnection.cursor.execute('Select ur.Identificador, u.usuarioID from Usuario u INNER JOIN UsuarioRoles ur ON ur.UsuarioRoleID = u.usuarioRoleID where u.email = :1 and u.senha = :2 order by u.nome FETCH FIRST 1 ROW ONLY',(login,senhaCriptografada))
         lista = oracleConnection.cursor.fetchall()
         oracleConnection.kill()
         if len(lista) > 0:
-            return lista[0][0]
+            return lista[0]
         return False
             
     

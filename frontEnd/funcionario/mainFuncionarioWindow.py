@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 )
 from funcionario.loteFrontEnd.loteWindow import LoteWindow
 from funcionario.estoqueFrontEnd.estoqueWindow import EstoqueWindow
-# from funcionario.pedidosFrontEnd.listarPedidosWindow import ListarPedidosWindow
+from funcionario.pedidosFrontEnd.listarPedidosWindow import ListarPedidosWindow
 class MainFuncionarioWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -47,6 +47,6 @@ class MainFuncionarioWindow(QMainWindow):
         self.selectedOption.show()
 
     def btn_pedidoClick(self):
-        # self.selectedOption = ListarPedidosWindow()
-        # self.selectedOption.show()
+        self.selectedOption = ListarPedidosWindow()
+        self.selectedOption.show()
         return

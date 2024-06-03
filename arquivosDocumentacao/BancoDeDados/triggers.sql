@@ -11,42 +11,86 @@ BEGIN
     SELECT SUM(QuantidadeRestante) INTO v_quantidade_lote_total
     FROM Lote
     WHERE ReceitaID = :NEW.ReceitaID
-      AND DataValidade <= TRUNC(SYSDATE);
+      AND DataValidade > TRUNC(SYSDATE);
+
     IF v_quantidade_lote_total < :NEW.Quantidade THEN
-            RAISE_APPLICATION_ERROR(-20001, 'Não há estoque suficiente.');
+        RAISE_APPLICATION_ERROR(-20001, 'Não há estoque suficiente.');
     END IF;
-    
+
     LOOP
-        SELECT QuantidadeRestante, LoteID INTO v_quantidade_lote, v_loteID
-        FROM Lote
-        WHERE ReceitaID = :NEW.ReceitaID
-          AND DataValidade <= TRUNC(SYSDATE) AND
-          QuantidadeRestante > 0
-        ORDER BY DataProducao ASC FETCH FIRST 1 ROW ONLY;
+        BEGIN
+            SELECT QuantidadeRestante, LoteID INTO v_quantidade_lote, v_loteID
+            FROM Lote
+            WHERE ReceitaID = :NEW.ReceitaID
+              AND DataValidade > TRUNC(SYSDATE) 
+              AND QuantidadeRestante > 0
+            ORDER BY DataProducao ASC
+            FETCH FIRST 1 ROW ONLY;
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                EXIT;
+        END;
+
         IF v_quantidade_lote < quantidade_aux THEN
-            UPDATE Lote SET QuantidadeRestante = 0 Where loteID = v_loteID;
+            UPDATE Lote
+            SET QuantidadeRestante = 0
+            WHERE LoteID = v_loteID;
             quantidade_aux := quantidade_aux - v_quantidade_lote;
         ELSE
-            UPDATE Lote SET QuantidadeRestante = QuantidadeRestante - quantidade_aux where LoteID = v_loteID;
+            UPDATE Lote
+            SET QuantidadeRestante = QuantidadeRestante - quantidade_aux
+            WHERE LoteID = v_loteID;
             quantidade_aux := 0;
         END IF;
+
         IF quantidade_aux = 0 THEN
             EXIT;
         END IF;
     END LOOP;
 END;
 
+
+
 CREATE OR REPLACE TRIGGER trg_atualiza_valorVenda_pedido
-    AFTER INSERT ON Pedido
+    BEFORE INSERT ON Pedido
     FOR EACH ROW
     DECLARE
         valorVenda_receita NUMBER(5,2);
     BEGIN
-     SELECT ValorVenda INTO valorVenda_receita FROM Receita WHERE ReceitaID = :NEW.ReceitaID;
-      UPDATE Pedido
-      SET ValorVenda = valorVenda_receita
-      WHERE PedidoID = :NEW.PedidoID;
+        SELECT ValorVenda INTO valorVenda_receita
+        FROM Receita
+        WHERE ReceitaID = :NEW.ReceitaID;
+        
+        -- Atualiza o ValorVenda do Pedido
+        :NEW.ValorVenda := valorVenda_receita;
+        
+        -- Atualiza o valorTotalVenda da venda
+        UPDATE Venda
+        SET VALORTOTALVENDA = NVL(VALORTOTALVENDA, 0) + valorVenda_receita * :NEW.quantidade
+        WHERE VENDAID = :NEW.VENDAID;
     END;
+
+CREATE OR REPLACE TRIGGER trg_atualiza_valorTotalVenda_exclusao
+    AFTER UPDATE OF excluido ON Pedido
+    FOR EACH ROW
+DECLARE
+    valorVenda_receita NUMBER(5,2);
+    valorTotalPedido_excluido NUMBER(10,2);
+BEGIN
+    IF :OLD.excluido = 0 AND :NEW.excluido = 1 THEN
+        SELECT ValorVenda INTO valorVenda_receita
+        FROM Receita
+        WHERE ReceitaID = :OLD.ReceitaID;
+        
+        valorTotalPedido_excluido := valorVenda_receita * :OLD.Quantidade;
+
+        UPDATE Venda
+        SET VALORTOTALVENDA = NVL(VALORTOTALVENDA, 0) - valorTotalPedido_excluido
+        WHERE VENDAID = :OLD.VENDAID;
+    END IF;
+END;
+/
+
 
 --TRIGGERS LOTEESTOQUE
 

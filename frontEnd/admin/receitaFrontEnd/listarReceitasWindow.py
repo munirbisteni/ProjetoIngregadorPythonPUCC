@@ -17,7 +17,7 @@ class ListarReceitasWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Listar Estoque")
+        self.setWindowTitle("Listar receitas")
         self.setGeometry(100, 100, 800, 600)
         
         self.layout = QVBoxLayout()

@@ -26,36 +26,35 @@ from PyQt6.QtWidgets import (
     QWidget,
     QGridLayout
 )
-from funcionario.loteFrontEnd.loteWindow import LoteWindow
-from funcionario.estoqueFrontEnd.estoqueWindow import EstoqueWindow
-
+from cliente.listarMeusPedidosWindow import ListarMeusPedidosWindow
+from cliente.cadastrarPedidoWindow import CadastrarPedidoWindow
 class ClienteWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, clienteID):
         super().__init__()
-
-        self.setWindowTitle("Funcionário")
+        self.clienteID = clienteID
+        self.setWindowTitle("área do cliente")
         self.setGeometry(100, 100, 400, 200)
         
         layout = QVBoxLayout()
         self.widgets = {
-            "btn_estoque":QPushButton("Estoque"),
-            "btn_lote":QPushButton("Lote")     
+            "btn_novoPedido":QPushButton("Realizar pedido"),
+            "btn_listarPedidos":QPushButton("Ver meus pedidos")     
         }
 
         for w in self.widgets.values():
             layout.addWidget(w)
-        self.widgets["btn_estoque"].clicked.connect(self.btn_estoqueClick)
-        self.widgets["btn_lote"].clicked.connect(self.btn_loteClick)
+        self.widgets["btn_novoPedido"].clicked.connect(self.btn_novoPedidoClick)
+        self.widgets["btn_listarPedidos"].clicked.connect(self.btn_listarPedidosClick)
 
 
         central_widget = QWidget()
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
 
-    def btn_estoqueClick(self):
-        self.selectedOption = EstoqueWindow()
+    def btn_novoPedidoClick(self):
+        self.selectedOption = CadastrarPedidoWindow(self.clienteID)
         self.selectedOption.show()
 
-    def btn_loteClick(self):
-        self.selectedOption = LoteWindow()
+    def btn_listarPedidosClick(self):
+        self.selectedOption = ListarMeusPedidosWindow(self.clienteID)
         self.selectedOption.show()

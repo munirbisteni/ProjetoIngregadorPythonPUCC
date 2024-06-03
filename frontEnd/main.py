@@ -78,13 +78,13 @@ class MainWindow(QMainWindow):
         response = Usuario.validar_login(email,senha)
         if response != False:
             self.close()
-            if response == "CLIENTE":
-                self.loginSucces = ClienteWindow()
+            if response[0] == "CLIENTE":
+                self.loginSucces = ClienteWindow(response[1])
                 self.loginSucces  .show()
-            elif response == "FUNCIONARIO":
+            elif response[0] == "FUNCIONARIO":
                 self.loginSucces = MainFuncionarioWindow()
                 self.loginSucces.show()
-            elif response == "ADMIN":
+            elif response[0] == "ADMIN":
                 self.loginSucces = MainAdminWindow()
                 self.loginSucces.show()
             else:

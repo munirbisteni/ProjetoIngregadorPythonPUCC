@@ -38,7 +38,7 @@ class CadastrarUsuarioWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Cadastrar Usuário")
         self.setGeometry(100, 100, 400, 200)
         
         self.layout = QVBoxLayout()

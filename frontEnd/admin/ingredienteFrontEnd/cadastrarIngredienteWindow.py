@@ -22,7 +22,7 @@ class CadastrarIngredienteWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Segunda Tela")
+        self.setWindowTitle("Cadastrar ingredientes")
         self.setGeometry(100, 100, 400, 200)
         
         self.layout = QVBoxLayout()
@@ -30,13 +30,13 @@ class CadastrarIngredienteWindow(QMainWindow):
                     "inp_nome":QLineEdit(),
                     "chk_alergenico":QCheckBox("Alergênico"),
                     "cmb_unidade":QComboBox(),
-                    "btn_cadastrarReceita":QPushButton("Continuar")   
+                    "btn_cadastrarIngrediente":QPushButton("Continuar")   
                 }
-        self.widgets["inp_nome"].setPlaceholderText("Nome da receita")
+        self.widgets["inp_nome"].setPlaceholderText("Nome do ingrediente")
         unidades = Unidade.listar_unidade()
         for item in unidades:
              self.widgets["cmb_unidade"].addItem(item[2], item[0])
-        self.widgets["btn_cadastrarReceita"].clicked.connect(self.btn_cadastrarIngredienteClick)
+        self.widgets["btn_cadastrarIngrediente"].clicked.connect(self.btn_cadastrarIngredienteClick)
 
         for w in self.widgets.values():
             self.layout.addWidget(w)
